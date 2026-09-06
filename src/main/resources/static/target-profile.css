@@ -1,0 +1,32 @@
+.target-profile {
+  max-width: 520px;
+  margin-top: 24px;
+  padding: 16px;
+  background: #f7f9fc;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.target-profile select {
+  margin-top: 3px;
+}
+
+.target-profile .help {
+  margin-top: 3px;
+}
+
+.target-warning {
+  display: block;
+  margin-top: 12px;
+  padding: 10px 12px;
+  color: #713f12;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.target-warning.hidden {
+  display: none;
+}

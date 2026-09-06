@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Help · LLM Script Composer</title>
+  <link rel="stylesheet" href="/help-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="/">← Return to Composer</a>
+    <span class="eyebrow">User guide</span>
+    <h1>LLM Script Composer</h1>
+    <p class="lead">Create a clear software specification through a guided questionnaire, download it, and give it to the implementation model of your choice.</p>
+
+    <section class="offline">
+      <h2>Works completely offline</h2>
+      <p>The Composer is a standalone plain Java web application. Creating projects, answering questionnaires, generating and downloading scripts, reviewing revisions, and recording experiments require no Internet connection.</p>
+      <p>The Composer does not contact an LLM or send your project information to an external service. You need an Internet connection only when you independently submit a downloaded script to an online model.</p>
+    </section>
+
+    <section>
+      <h2>1. Start a project</h2>
+      <ol>
+        <li>Open <strong>Projects</strong> and select <strong>New project</strong>.</li>
+        <li>Enter a recognizable project name.</li>
+        <li>Search or browse the preset catalog.</li>
+        <li>Choose an application preset for a complete business application, or a UI preset when you only need an interface specification.</li>
+      </ol>
+      <p class="note">Clicking an existing project card resumes its questionnaire. The card’s Tracker button opens its model experiments, while Delete removes the project and its complete local history.</p>
+    </section>
+
+    <section>
+      <h2>2. Complete the questionnaire</h2>
+      <p>Each page asks one focused question. Select the choices that describe the application you actually want, then use <strong>Next</strong>. The progress rail lets you return to completed steps.</p>
+      <ul>
+        <li>Choose all records and workflows the finished application must support.</li>
+        <li>Use business terms consistently. Select a customer, work item, resource, appointment, inventory item, or other record only when it belongs in the application.</li>
+        <li>If you change an earlier answer, review the later steps again because choices that depended on the old answer may be cleared.</li>
+        <li>Your current stage is saved with the project, and major stages have stable browser URLs.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. Review before generating</h2>
+      <p>The Review page shows the complete set of answers. Select any row to correct it. Confirm that the selected records can support the selected workflows—for example, scheduling normally needs an appointment, job, event, or schedulable resource.</p>
+      <p>Select the target profile only after the requirements are correct. Changing the target changes how instructions are presented to the model; it does not change the application you requested.</p>
+    </section>
+
+    <section>
+      <h2>4. Choose a target model</h2>
+      <dl>
+        <dt>Portable</dt><dd>Use when you want a model-neutral script or plan to compare several models.</dd>
+        <dt>ChatGPT</dt><dd>Uses delivery guidance suitable for a ChatGPT implementation session.</dd>
+        <dt>Claude</dt><dd>Uses delivery guidance suitable for a Claude implementation session.</dd>
+        <dt>Gemini</dt><dd>Provides additional explicit implementation guidance because testing showed that Gemini benefits from more detail.</dd>
+        <dt>DeepSeek</dt><dd>Experimental. September 2026 testing did not reliably produce the requested standalone browser application. Stop after one failed architectural correction and try a different model.</dd>
+      </dl>
+    </section>
+
+    <section>
+      <h2>5. Generate and download</h2>
+      <ol>
+        <li>Select <strong>Generate compressed Script</strong>.</li>
+        <li>Open <strong>Revisions</strong>.</li>
+        <li>Download the generated JSONC file for the revision you want to test.</li>
+        <li>Keep the downloaded revision unchanged so results from different models remain comparable.</li>
+      </ol>
+      <p>The Composer checks the specification before making it available. If generation is blocked, return to the questionnaire and add the record, relationship, or workflow information identified by the error.</p>
+    </section>
+
+    <section>
+      <h2>6. Send the script to an LLM</h2>
+      <p>Start a fresh model conversation, attach the downloaded JSONC file, and give a short delivery request. Do not rewrite the script into a long prompt.</p>
+      <div class="example"><strong>Example request</strong><br>Build the complete runnable application described by the attached script. Follow every requirement and acceptance condition. Return the source code, startup instructions, tests, and a summary of any specification conflict you find.</div>
+      <p>Ask the model to report conflicts instead of silently inventing missing entities or changing business rules. Before accepting the result, run the application, exercise its visible workflows, restart it to verify persistence, and reproduce its automated tests.</p>
+    </section>
+
+    <section>
+      <h2>7. Compare results in the Tracker</h2>
+      <p>The Experiment Tracker records which revision and model you tested, whether the result succeeded, your rating, and important findings. Use a separate entry for each model or retry so you can distinguish a script improvement from a model-specific result.</p>
+      <p>Useful findings include generation time, missing pages, incorrect entities, dead controls, persistence failures, test results, corrections required, and whether the delivered project opened cleanly in your development environment.</p>
+    </section>
+
+    <section>
+      <h2>Saving work and backups</h2>
+      <p><strong>File storage</strong> is the default and needs no database driver. Projects, revisions, and experiments are saved under the configured local data directory. Back up that directory when the history matters.</p>
+      <p><strong>Database storage</strong> uses JDBC and is intended for developers who prefer a database-backed repository. Configure the connection in <code>composer.properties</code> and ensure the selected JDBC driver is available at runtime.</p>
+      <p>Downloaded JSONC files are independent copies. Deleting a project from the Composer does not remove files you already downloaded elsewhere.</p>
+    </section>
+
+    <section>
+      <h2>Run in STS or Eclipse</h2>
+      <ol>
+        <li>Select <strong>File &gt; Import &gt; Existing Maven Projects</strong>.</li>
+        <li>Choose the folder containing <code>pom.xml</code> and finish the import.</li>
+        <li>Open <code>org.roberttu.llmscriptcomposer.LlmScriptComposerApplication</code>.</li>
+        <li>Select <strong>Run As &gt; Java Application</strong>.</li>
+        <li>Open <code>http://127.0.0.1:8090</code>.</li>
+      </ol>
+      <p>The same class is the entry point used by the executable JAR.</p>
+    </section>
+
+    <section>
+      <h2>Troubleshooting</h2>
+      <dl>
+        <dt>The application does not start</dt><dd>Confirm Java 21 is installed and that the configured port is not already in use.</dd>
+        <dt>A project does not appear</dt><dd>Confirm the application is using the same storage mode and data directory as the previous run.</dd>
+        <dt>Generation is blocked</dt><dd>Read the displayed validation message, return to the questionnaire, and correct the incompatible or missing selection.</dd>
+        <dt>The LLM builds a console program</dt><dd>Use the correct target profile, start a fresh conversation, attach the script itself, and explicitly request the complete runnable browser application described by it.</dd>
+        <dt>The model reports a conflict</dt><dd>Record it in the Tracker. Correct the preset or questionnaire metadata rather than repeatedly asking the model to guess.</dd>
+      </dl>
+    </section>
+  </main>
+</body>
+</html>

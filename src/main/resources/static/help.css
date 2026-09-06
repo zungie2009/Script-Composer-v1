@@ -1,0 +1,26 @@
+.header-actions {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.help-button {
+  align-items: center;
+  background: white;
+  border: 1px solid #b9c5d2;
+  border-radius: 8px;
+  color: #172334;
+  display: inline-flex;
+  font-weight: 600;
+  justify-content: center;
+  padding: 8px 14px;
+  text-decoration: none;
+}
+
+.help-button:hover,
+.help-button:focus-visible {
+  border-color: #2368d1;
+  color: #2368d1;
+  outline: none;
+}
+
